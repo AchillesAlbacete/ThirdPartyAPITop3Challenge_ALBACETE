@@ -4,8 +4,12 @@ exports.handler = async function (event) {
 
   if (!apiKey) {
     return {
-      statusCode: 500,
-      body: JSON.stringify({ error: 'API key is missing in environment variables.' }),
+      statusCode: 400,
+      headers: { 
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*'
+      },
+      body: JSON.stringify({ error: 'TMDB_API_KEY environment variable is missing on Netlify.' }),
     };
   }
 
@@ -14,6 +18,17 @@ exports.handler = async function (event) {
   try {
     const response = await fetch(tmdbUrl);
     const data = await response.json();
+
+    if (!response.ok) {
+      return {
+        statusCode: response.status,
+        headers: { 
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': '*'
+        },
+        body: JSON.stringify({ error: data.status_message || 'TMDB API error' }),
+      };
+    }
 
     return {
       statusCode: 200,
@@ -26,7 +41,11 @@ exports.handler = async function (event) {
   } catch (error) {
     return {
       statusCode: 500,
-      body: JSON.stringify({ error: 'Failed to fetch data from TMDB.' }),
+      headers: { 
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*'
+      },
+      body: JSON.stringify({ error: error.message }),
     };
   }
 };
