@@ -1,5 +1,6 @@
 exports.handler = async function (event) {
   const searchQuery = event.queryStringParameters.query || 'Avengers';
+  const category = event.queryStringParameters.category || 'all';
   const apiKey = process.env.TMDB_API_KEY;
 
   if (!apiKey) {
@@ -13,7 +14,9 @@ exports.handler = async function (event) {
     };
   }
 
-  const tmdbUrl = `https://api.themoviedb.org/3/search/movie?api_key=${apiKey}&query=${encodeURIComponent(searchQuery)}`;
+  const tmdbUrl = category === 'all'
+    ? `https://api.themoviedb.org/3/search/movie?api_key=${apiKey}&query=${encodeURIComponent(searchQuery)}`
+    : `https://api.themoviedb.org/3/discover/movie?api_key=${apiKey}&with_genres=${encodeURIComponent(category)}&sort_by=popularity.desc`;
 
   try {
     const response = await fetch(tmdbUrl);

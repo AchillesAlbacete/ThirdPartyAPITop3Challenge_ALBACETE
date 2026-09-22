@@ -97,6 +97,37 @@ button:active {
   transform: translateY(0);
 }
 
+.category-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  max-width: 1180px;
+  margin: 0 auto 28px;
+  color: var(--muted);
+  font-size: 14px;
+  font-weight: 600;
+}
+
+select {
+  min-width: 190px;
+  padding: 11px 38px 11px 14px;
+  color: var(--text);
+  background: var(--surface-solid);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 10px;
+  outline: none;
+  cursor: pointer;
+  font-size: 14px;
+  transition: border-color 180ms ease, box-shadow 180ms ease;
+}
+
+select:focus,
+select:hover {
+  border-color: rgba(255, 70, 85, 0.65);
+  box-shadow: 0 0 0 4px rgba(255, 70, 85, 0.1);
+}
+
 .grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
@@ -178,6 +209,16 @@ button:active {
 
   form {
     margin-bottom: 30px;
+  }
+
+  .category-bar {
+    align-items: stretch;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  select {
+    width: 100%;
   }
 
   button {

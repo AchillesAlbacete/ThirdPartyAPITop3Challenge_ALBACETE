@@ -1,5 +1,6 @@
 const form = document.getElementById('search-form');
 const input = document.getElementById('search-input');
+const categorySelect = document.getElementById('category-select');
 const resultsContainer = document.getElementById('movie-results');
 
 // Initial default search
@@ -9,14 +10,19 @@ form.addEventListener('submit', (e) => {
   e.preventDefault();
   const query = input.value.trim();
   if (query) {
-    fetchMovies(query);
+    fetchMovies(query, categorySelect.value);
   }
 });
 
-async function fetchMovies(query) {
+categorySelect.addEventListener('change', () => {
+  fetchMovies(input.value.trim() || 'Avengers', categorySelect.value);
+});
+
+async function fetchMovies(query, category = 'all') {
   resultsContainer.innerHTML = '<p>Loading movies...</p>';
   try {
-    const response = await fetch(`/.netlify/functions/getMovies?query=${encodeURIComponent(query)}`);
+    const params = new URLSearchParams({ query, category });
+    const response = await fetch(`/.netlify/functions/getMovies?${params}`);
     const movies = await response.json();
     displayMovies(movies);
   } catch (error) {
